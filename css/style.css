@@ -358,8 +358,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding: 0.75rem 1rem 0;
-  gap: 0.65rem;
+  padding: 0.75rem 1rem 0.75rem;  /* bottom padding ensures ad strip visible */
+  gap: 0.55rem;
 }
 
 .app-wrapper {
@@ -487,10 +487,14 @@ body {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  /* Cap each row so 8 rows + display + ad strip all fit in viewport.
+     ~100dvh minus: topbar(~2.8rem) + content padding(1.5rem) + display(~7rem)
+     + ad(90px~5.6rem) + gaps(~1rem) ≈ 18rem reserved. Remaining / 8 rows. */
+  grid-template-rows: repeat(8, minmax(0, 1fr));
   gap: 0.38rem;
   padding: 0.55rem;
   min-height: 0;
+  overflow: hidden;  /* belt-and-suspenders: never overflow its flex slot */
 }
 
 .btn {
@@ -676,7 +680,8 @@ body {
    ══════════════════════════════════════════════════════════════════════════════ */
 .ad-strip {
   flex-shrink: 0;
-  height: 88px;
+  height: 90px;
+  min-height: 90px;   /* never let flexbox crush it */
   background: var(--ad-bg);
   border: 1px dashed var(--ad-border);
   border-radius: 0.75rem;
@@ -688,7 +693,6 @@ body {
   font-size: 0.65rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -754,7 +758,7 @@ body {
   }
   .history-toggle-btn:hover { background: var(--surface-2); }
 
-  .ad-strip { height: 64px; margin-bottom: 0.45rem; }
+  .ad-strip { height: 64px; min-height: 64px; }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
