@@ -71,8 +71,12 @@
   </script>
 
   <link rel="stylesheet" href="css/style.css" />
+
 </head>
 <body>
+
+  <!-- ── App shell — locked to viewport height ──────────────────────────── -->
+  <div class="app-shell">
 
   <!-- ── Top bar ─────────────────────────────────────────────────────────── -->
   <header class="top-bar">
@@ -227,7 +231,97 @@
       <span id="banner-placeholder">&#8203;</span>
     </div>
 
+    <!-- Scroll hint -->
+    <button class="scroll-hint" id="scroll-hint" aria-label="Scroll down for more">
+      <span class="scroll-hint-text" id="scroll-hint-text">Learn more</span>
+      <span class="scroll-hint-arrow">▾</span>
+    </button>
+
+  </div><!-- /app-shell -->
+
+
+  <!-- ── Drawer backdrop ─────────────────────────────────────────────────── -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+  <!-- ── Math content drawer — slides up on demand ────────────────────────── -->
+  <div class="math-drawer" id="math-drawer" role="dialog" aria-modal="true" aria-label="Math guide" aria-hidden="true">
+    <div class="drawer-handle-row">
+      <div class="drawer-handle"></div>
+      <span class="drawer-title" id="drawer-title">Math Guide</span>
+      <button class="drawer-close" id="drawer-close" aria-label="Close">✕</button>
+    </div>
+    <div class="drawer-body">
+
+      <article class="math-article">
+        <div class="math-article-header">
+          <span class="math-article-icon">🧮</span>
+          <h2 class="math-article-title" data-i18n="howToUseTitle">How to Use This Calculator</h2>
+        </div>
+        <p data-i18n="howToUseP1">This scientific calculator supports both basic arithmetic and advanced mathematical functions. Type directly using your keyboard or tap the buttons on screen. Press Enter or = to compute, and Escape to clear.</p>
+        <p data-i18n="howToUseP2">The calculator automatically closes unclosed parentheses when you press equals — so sin(45 will correctly compute as sin(45°). Use the ANS button to reuse the last result in a new calculation, and click any entry in the History panel to load it back.</p>
+        <p data-i18n="howToUseP3">Switch between DEG (degrees) and RAD (radians) using the mode button in the top-left of the display. The ⚙ settings panel lets you choose font size and how many decimal places to show.</p>
+      </article>
+
+      <div class="math-divider"></div>
+
+      <article class="math-article">
+        <div class="math-article-header">
+          <span class="math-article-icon">📐</span>
+          <h2 class="math-article-title" data-i18n="trigTitle">Trigonometry — sin, cos, tan</h2>
+        </div>
+        <p data-i18n="trigP1">Trigonometric functions relate the angles of a triangle to the ratios of its sides. They are fundamental in physics, engineering, architecture, and many other fields. On this calculator you can use sin, cos, tan and their inverses asin, acos, atan.</p>
+        <p data-i18n="trigP2">By default the calculator works in degrees. Switch to radians for calculus and physics work — in radians a full circle is 2π ≈ 6.283. A quick reference of common angles:</p>
+        <table class="math-table" aria-label="Common trigonometry values">
+          <thead>
+            <tr>
+              <th data-i18n="tableAngle">Angle (°)</th>
+              <th data-i18n="tableRad">Radians</th>
+              <th>sin</th><th>cos</th><th>tan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0°</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>30°</td><td>π/6</td><td>0.5</td><td>√3/2 ≈ 0.866</td><td>1/√3 ≈ 0.577</td></tr>
+            <tr><td>45°</td><td>π/4</td><td>√2/2 ≈ 0.707</td><td>√2/2 ≈ 0.707</td><td>1</td></tr>
+            <tr><td>60°</td><td>π/3</td><td>√3/2 ≈ 0.866</td><td>0.5</td><td>√3 ≈ 1.732</td></tr>
+            <tr><td>90°</td><td>π/2</td><td>1</td><td>0</td><td>undefined</td></tr>
+            <tr><td>180°</td><td>π</td><td>0</td><td>−1</td><td>0</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <div class="math-divider"></div>
+
+      <article class="math-article">
+        <div class="math-article-header">
+          <span class="math-article-icon">㏒</span>
+          <h2 class="math-article-title" data-i18n="logTitle">Logarithms &amp; Exponentials</h2>
+        </div>
+        <p data-i18n="logP1">A logarithm answers: to what power must a base be raised to get a given number? log computes base-10, so log(100) = 2 because 10² = 100. ln computes the natural logarithm (base e ≈ 2.718), used in calculus, biology and finance.</p>
+        <p data-i18n="logP2">Logarithms and exponentials are inverse operations: 10^log(x) = x and e^ln(x) = x. Essential for solving equations where the unknown is an exponent — compound interest, population growth, radioactive decay, earthquake magnitude.</p>
+        <p data-i18n="logP3">Use xʸ to raise any number to a power, and √ for square roots. Fractional exponents also work: 27^(1/3) gives the cube root of 27 = 3.</p>
+      </article>
+
+      <div class="math-divider"></div>
+
+      <article class="math-article">
+        <div class="math-article-header">
+          <span class="math-article-icon">💡</span>
+          <h2 class="math-article-title" data-i18n="tipsTitle">Tips &amp; Tricks</h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip-card"><span class="tip-card-title" data-i18n="tip1Title">Implicit Multiplication</span><p class="tip-card-body" data-i18n="tip1Body">Omit × before parentheses or constants. <code>2π</code>, <code>3(4+1)</code> and <code>2sin(30)</code> all work.</p></div>
+          <div class="tip-card"><span class="tip-card-title" data-i18n="tip2Title">Auto-close Parentheses</span><p class="tip-card-body" data-i18n="tip2Body">Forgot a closing parenthesis? Pressing = auto-closes them. <code>sin(45</code> → <code>sin(45)</code>.</p></div>
+          <div class="tip-card"><span class="tip-card-title" data-i18n="tip3Title">Chain with ANS</span><p class="tip-card-body" data-i18n="tip3Body">Press <code>ANS</code> to insert the last result into a new expression for multi-step calculations.</p></div>
+          <div class="tip-card"><span class="tip-card-title" data-i18n="tip4Title">Keyboard Shortcuts</span><p class="tip-card-body" data-i18n="tip4Body"><code>Enter</code>=calculate, <code>Backspace</code>=delete, <code>Escape</code>=clear. All digits and operators work from keyboard.</p></div>
+          <div class="tip-card"><span class="tip-card-title" data-i18n="tip5Title">Decimal Precision</span><p class="tip-card-body" data-i18n="tip5Body">Open ⚙ Settings to fix decimal places (0–15). Great for money calculations needing 2 decimals.</p></div>
+          <div class="tip-card"><span class="tip-card-title" data-i18n="tip6Title">History</span><p class="tip-card-body" data-i18n="tip6Body">Last 50 calculations saved automatically. Click any entry to load it back into the calculator.</p></div>
+        </div>
+      </article>
+
+    </div>
   </div>
+
 
   <!-- ── Verification modal ──────────────────────────────────────────────── -->
   <div class="modal-backdrop" id="modal-backdrop" aria-hidden="true"></div>

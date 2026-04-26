@@ -21,6 +21,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const decimalSelect = document.getElementById("decimal-select");
   const sizeBtns      = document.querySelectorAll(".size-btn");
   const allButtons    = document.querySelectorAll(".btn-grid [data-action]");
+  const scrollHint     = document.getElementById("scroll-hint");
+  const mathDrawer     = document.getElementById("math-drawer");
+  const drawerBackdrop = document.getElementById("drawer-backdrop");
+  const drawerClose    = document.getElementById("drawer-close");
+
+  // ── Math drawer ───────────────────────────────────────────────────────────
+  function openDrawer() {
+    mathDrawer.classList.add("open");
+    drawerBackdrop.classList.add("open");
+    mathDrawer.setAttribute("aria-hidden", "false");
+  }
+  function closeDrawer() {
+    mathDrawer.classList.remove("open");
+    drawerBackdrop.classList.remove("open");
+    mathDrawer.setAttribute("aria-hidden", "true");
+  }
+  if (scrollHint)     scrollHint.addEventListener("click", openDrawer);
+  if (drawerClose)    drawerClose.addEventListener("click", closeDrawer);
+  if (drawerBackdrop) drawerBackdrop.addEventListener("click", closeDrawer);
 
   // ── Test modal refs ────────────────────────────────────────────────────────
   const verifiedBadge  = document.getElementById("verified-badge");
@@ -93,6 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && settingsPanel.classList.contains("open")) {
       closeSettings();
+    }
+    if (e.key === "Escape" && mathDrawer && mathDrawer.classList.contains("open")) {
+      closeDrawer();
     }
   });
 
@@ -270,6 +292,28 @@ document.addEventListener("DOMContentLoaded", () => {
       i18n.getLang() === "es" ? "Decimales" : "Decimal Places";
     updateCopyBtn(false);
     renderHistory();
+    applyContentTranslations();
+  }
+
+  function applyContentTranslations() {
+    const lang = i18n.getLang();
+    const c = i18n.t.bind(i18n);
+    // Scroll hint
+    const scrollHintText = document.getElementById("scroll-hint-text");
+    if (scrollHintText) scrollHintText.textContent = i18n.t("content.scrollHint");
+    const drawerTitleEl = document.getElementById("drawer-title");
+    if (drawerTitleEl) drawerTitleEl.textContent = i18n.getLang() === "es" ? "Guía Matemática" : "Math Guide";
+    // All data-i18n elements in math content
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = "content." + el.dataset.i18n.replace(/^content\./, "");
+      const text = i18n.t(key);
+      if (text && text !== key) el.textContent = text;
+    });
+    // Table headers (special — they use data-i18n directly)
+    const tableAngle = document.querySelector("[data-i18n='tableAngle']");
+    const tableRad   = document.querySelector("[data-i18n='tableRad']");
+    if (tableAngle) tableAngle.textContent = i18n.t("content.tableAngle");
+    if (tableRad)   tableRad.textContent   = i18n.t("content.tableRad");
   }
 
   // ── Angle mode ─────────────────────────────────────────────────────────────
