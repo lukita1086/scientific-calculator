@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-font-size="normal">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ── Primary SEO ───────────────────────────────────────────────────────── -->
+  <title>Scientific Calculator Online — Free | Calculadora Científica</title>
+  <meta name="description" content="Free online scientific calculator with trigonometry, logarithms, roots and more. Available in English and Spanish. Calculadora científica gratis con seno, coseno, tangente, logaritmos y más." />
+  <meta name="keywords" content="scientific calculator, calculadora científica, calculadora científica online, calculadora científica gratis, calculadora científica Argentina, seno coseno tangente, calculadora de logaritmos, trigonometry calculator, free scientific calculator" />
+  <meta name="author" content="Scientific Calculator" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yourcalculator.com/" />
+
+  <!-- ── Language targeting ────────────────────────────────────────────────── -->
+  <link rel="alternate" hreflang="en"    href="https://yourcalculator.com/" />
+  <link rel="alternate" hreflang="es"    href="https://yourcalculator.com/?lang=es" />
+  <link rel="alternate" hreflang="es-AR" href="https://yourcalculator.com/?lang=es" />
+  <link rel="alternate" hreflang="x-default" href="https://yourcalculator.com/" />
+
+  <!-- ── Open Graph (social sharing) ──────────────────────────────────────── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://yourcalculator.com/" />
+  <meta property="og:title"       content="Scientific Calculator Online — Free | Calculadora Científica" />
+  <meta property="og:description" content="Free online scientific calculator. Trigonometry, logarithms, roots, constants and more. English & Spanish. Calculadora científica gratis." />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:locale:alternate" content="es_AR" />
+
+  <!-- ── Twitter Card ──────────────────────────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Scientific Calculator Online — Free" />
+  <meta name="twitter:description" content="Free scientific calculator with trig, log, roots. English & Spanish." />
+
+  <!-- ── JSON-LD Structured Data ───────────────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Scientific Calculator",
+    "alternateName": "Calculadora Científica",
+    "applicationCategory": "EducationalApplication",
+    "applicationSubCategory": "Calculator",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free online scientific calculator supporting trigonometry, logarithms, square roots, constants (π, e), factorial, and more. Available in English and Spanish.",
+    "featureList": [
+      "Trigonometric functions (sin, cos, tan, asin, acos, atan)",
+      "Logarithms (log, ln)",
+      "Square root and powers",
+      "Mathematical constants (π, e)",
+      "Factorial",
+      "Calculation history",
+      "Degree and radian mode",
+      "English and Spanish interface"
+    ],
+    "inLanguage": ["en", "es"],
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Students, Engineers, Scientists"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Top bar ─────────────────────────────────────────────────────────── -->
+  <header class="top-bar">
+    <div class="app-title-group">
+      <span class="app-title">Scientific Calculator</span>
+      <button class="verified-badge" id="verified-badge" aria-label="View verification tests">
+        <span class="verified-icon">✓</span>
+        <span class="verified-label">Verified</span>
+      </button>
+    </div>
+    <div class="top-controls">
+      <button class="ctrl-btn" id="lang-btn"      aria-label="Toggle language">EN</button>
+      <button class="ctrl-btn" id="theme-btn"     aria-label="Toggle theme">Light Mode</button>
+      <button class="ctrl-btn ctrl-btn--icon" id="settings-btn" aria-label="Settings" aria-expanded="false">⚙</button>
+    </div>
+  </header>
+
+  <!-- ── Settings panel (dropdown from top-right) ────────────────────────── -->
+  <div class="settings-panel" id="settings-panel" aria-hidden="true">
+    <div class="settings-section">
+      <label class="settings-label" id="font-size-label">Font Size</label>
+      <div class="size-btns" role="group" aria-labelledby="font-size-label">
+        <button class="size-btn" data-size="normal" aria-label="Normal font">A</button>
+        <button class="size-btn" data-size="large"  aria-label="Large font">A</button>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <label class="settings-label" for="decimal-select" id="decimal-label">Decimal Places</label>
+      <select class="settings-select" id="decimal-select" aria-labelledby="decimal-label">
+        <option value="auto">Auto</option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+      </select>
+    </div>
+  </div>
+  <!-- Overlay to close settings when clicking outside -->
+  <div class="settings-overlay" id="settings-overlay"></div>
+
+  <!-- ── Content area ────────────────────────────────────────────────────── -->
+  <div class="content-area">
+
+    <main class="app-wrapper">
+
+      <!-- ── Calculator ──────────────────────────────────────────────────── -->
+      <section class="calculator" aria-label="Calculator">
+
+        <!-- Display -->
+        <div class="display">
+          <div class="display-meta">
+            <button class="angle-mode-btn" id="angle-mode-btn" aria-label="Toggle angle mode">DEG</button>
+            <button class="copy-btn"       id="copy-btn"       aria-label="Copy result">Copy</button>
+          </div>
+          <div class="expression" id="expression" aria-live="polite"></div>
+          <div class="result"     id="result"     aria-live="assertive"></div>
+        </div>
+
+        <!-- Button grid 5 × 8 -->
+        <div class="btn-grid" role="group" aria-label="Calculator buttons">
+
+          <!-- Row 1 — Trig -->
+          <button class="btn btn-fn" data-action="func" data-value="sin(" aria-label="Sine">sin</button>
+          <button class="btn btn-fn" data-action="func" data-value="cos(" aria-label="Cosine">cos</button>
+          <button class="btn btn-fn" data-action="func" data-value="tan(" aria-label="Tangent">tan</button>
+          <button class="btn btn-fn" data-action="func" data-value="log(" aria-label="Log base 10">log</button>
+          <button class="btn btn-fn" data-action="func" data-value="ln("  aria-label="Natural log">ln</button>
+
+          <!-- Row 2 — Inverse trig + extras -->
+          <button class="btn btn-fn" data-action="func" data-value="asin(" aria-label="Arcsin">asin</button>
+          <button class="btn btn-fn" data-action="func" data-value="acos(" aria-label="Arccos">acos</button>
+          <button class="btn btn-fn" data-action="func" data-value="atan(" aria-label="Arctan">atan</button>
+          <button class="btn btn-fn" data-action="func" data-value="sqrt(" aria-label="Square root">√</button>
+          <button class="btn btn-fn" data-action="func" data-value="abs("  aria-label="Absolute value">|x|</button>
+
+          <!-- Row 3 — Constants & power -->
+          <button class="btn btn-fn" data-action="constant" data-value="pi" aria-label="Pi">π</button>
+          <button class="btn btn-fn" data-action="constant" data-value="e"  aria-label="Euler number">e</button>
+          <button class="btn btn-fn" data-action="operator" data-value="^"  aria-label="Power">xʸ</button>
+          <button class="btn btn-fn" data-action="square"                   aria-label="Square">x²</button>
+          <button class="btn btn-op" data-action="paren-open"               aria-label="Open paren">(</button>
+
+          <!-- Row 4 — Utility -->
+          <button class="btn btn-clear" data-action="clear"       aria-label="Clear all">C</button>
+          <button class="btn btn-fn"    data-action="clear-entry" aria-label="Clear entry">CE</button>
+          <button class="btn btn-fn"    data-action="sign"        aria-label="Toggle sign">±</button>
+          <button class="btn btn-fn"    data-action="percent"     aria-label="Percent">%</button>
+          <button class="btn btn-op"    data-action="paren-close" aria-label="Close paren">)</button>
+
+          <!-- Row 5 — 7 8 9 ÷ ⌫ -->
+          <button class="btn btn-digit" data-action="digit"    data-value="7">7</button>
+          <button class="btn btn-digit" data-action="digit"    data-value="8">8</button>
+          <button class="btn btn-digit" data-action="digit"    data-value="9">9</button>
+          <button class="btn btn-op"    data-action="operator" data-value="/" aria-label="Divide">÷</button>
+          <button class="btn btn-fn"    data-action="backspace" aria-label="Backspace">⌫</button>
+
+          <!-- Row 6 — 4 5 6 × ANS -->
+          <button class="btn btn-digit" data-action="digit"    data-value="4">4</button>
+          <button class="btn btn-digit" data-action="digit"    data-value="5">5</button>
+          <button class="btn btn-digit" data-action="digit"    data-value="6">6</button>
+          <button class="btn btn-op"    data-action="operator" data-value="*" aria-label="Multiply">×</button>
+          <button class="btn btn-fn"    data-action="ans"      aria-label="Last answer">ANS</button>
+
+          <!-- Row 7 — 1 2 3 − = -->
+          <button class="btn btn-digit" data-action="digit"    data-value="1">1</button>
+          <button class="btn btn-digit" data-action="digit"    data-value="2">2</button>
+          <button class="btn btn-digit" data-action="digit"    data-value="3">3</button>
+          <button class="btn btn-op"    data-action="operator" data-value="-" aria-label="Subtract">−</button>
+          <button class="btn btn-equals" data-action="equals"  aria-label="Equals">=</button>
+
+          <!-- Row 8 — 0 (wide) . + n! -->
+          <button class="btn btn-digit btn-0" data-action="digit"    data-value="0">0</button>
+          <button class="btn btn-digit"       data-action="dot"      aria-label="Decimal">.</button>
+          <button class="btn btn-op"          data-action="operator" data-value="+" aria-label="Add">+</button>
+          <button class="btn btn-fn"          data-action="operator" data-value="!" aria-label="Factorial">n!</button>
+
+        </div>
+      </section>
+
+      <!-- ── History panel ───────────────────────────────────────────────── -->
+      <aside class="history-panel" id="history-panel" aria-label="Calculation history">
+        <div class="history-header">
+          <span class="history-heading" id="history-heading">History</span>
+          <button class="clear-history-btn" id="clear-history">Clear</button>
+        </div>
+        <ul class="history-list" id="history-list" role="list"></ul>
+      </aside>
+
+    </main>
+
+    <!-- Mobile history toggle -->
+    <button class="history-toggle-btn" id="history-toggle"
+            aria-expanded="false" aria-controls="history-panel">
+      📋 History
+    </button>
+
+    <!-- Ad strip -->
+    <div class="ad-strip" aria-label="Advertisement">
+      <span>Advertisement</span>
+    </div>
+
+  </div>
+
+  <!-- ── Verification modal ──────────────────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-backdrop" aria-hidden="true"></div>
+  <div class="test-modal" id="test-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="test-modal-header">
+      <div class="test-modal-title-row">
+        <span class="test-modal-icon">✓</span>
+        <h2 class="test-modal-title" id="modal-title">Calculator Verified</h2>
+      </div>
+      <button class="test-modal-close" id="modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="test-modal-summary" id="test-summary">
+      <div class="summary-spinner" id="summary-spinner"></div>
+    </div>
+    <div class="test-modal-body" id="test-body"></div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/tests.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
