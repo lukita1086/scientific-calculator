@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://scientific-calculator-eight-alpha.vercel.app/</loc>
+    <loc>https://open-calc.vercel.app/</loc>
     <lastmod>2025-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <!-- English -->
-    <xhtml:link rel="alternate" hreflang="en"      href="https://scientific-calculator-eight-alpha.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="en"      href="https://open-calc.vercel.app/" />
     <!-- Spanish (all regions) -->
-    <xhtml:link rel="alternate" hreflang="es"      href="https://scientific-calculator-eight-alpha.vercel.app/?lang=es" />
+    <xhtml:link rel="alternate" hreflang="es"      href="https://open-calc.vercel.app/?lang=es" />
     <!-- Spanish Argentina specifically -->
-    <xhtml:link rel="alternate" hreflang="es-AR"   href="https://scientific-calculator-eight-alpha.vercel.app/?lang=es" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://scientific-calculator-eight-alpha.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="es-AR"   href="https://open-calc.vercel.app/?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://open-calc.vercel.app/" />
   </url>
 </urlset>

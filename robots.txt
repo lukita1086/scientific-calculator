@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location — update with your real domain
-Sitemap: https://scientific-calculator-eight-alpha.vercel.app/sitemap.xml
+Sitemap: https://open-calc.vercel.app/sitemap.xml
