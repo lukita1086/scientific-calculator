@@ -245,6 +245,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const lang = i18n.toggleLang();
     // Keep <html lang=""> in sync for screen readers and SEO crawlers
     document.documentElement.setAttribute("lang", lang);
+    // Update canonical so Google sees the right URL for this language
+    i18n.updateCanonical(lang);
+    // Update the browser URL bar without reloading the page
+    // EN → clean URL (no param), ES → ?lang=es
+    const newUrl = i18n.langUrl(lang);
+    window.history.replaceState({}, "", newUrl);
     applyTranslations();
     renderHistory();
   });
@@ -441,7 +447,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ── Init ───────────────────────────────────────────────────────────────────
   // Sync lang attribute with detected/saved language
-  document.documentElement.setAttribute("lang", i18n.getLang());
+  const initLang = i18n.getLang();
+  document.documentElement.setAttribute("lang", initLang);
+  // Sync canonical URL to match current language
+  i18n.updateCanonical(initLang);
+  // If URL has ?lang= param, make sure the URL bar is clean for English
+  if (initLang === "en") {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("lang")) {
+      url.searchParams.delete("lang");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }
   applyTranslations();
   updateDisplay();
 });
