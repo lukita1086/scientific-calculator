@@ -3,7 +3,7 @@
 A free, responsive, bilingual (English/Spanish) scientific calculator web app.  
 No frameworks, no build step — pure HTML, CSS and vanilla JS.
 
-🔗 **Live demo:** [yourcalculator.com](https://yourcalculator.com)
+🔗 **Live demo:** [scientific-calculator-eight-alpha.vercel.app](https://scientific-calculator-eight-alpha.vercel.app)
 
 ---
 
@@ -85,7 +85,7 @@ Drag and drop the project folder at [netlify.com/drop](https://app.netlify.com/d
 
 ## 🔍 SEO
 
-Before deploying, replace `https://yourcalculator.com` with your real domain in:
+Before deploying, replace `https://scientific-calculator-eight-alpha.vercel.app` with your real domain in:
 - `index.html` — canonical, hreflang, og:url tags
 - `robots.txt` — Sitemap URL
 - `sitemap.xml` — `<loc>` and `<xhtml:link>` URLs
