@@ -64,8 +64,5 @@ const History = (() => {
       return [...entries];
     },
 
-    count() {
-      return entries.length;
-    },
   };
 })();

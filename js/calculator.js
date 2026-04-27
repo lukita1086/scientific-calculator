@@ -314,7 +314,6 @@ const Calculator = (() => {
     getExpression: () => expression,
     getResult: () => result,
     getAngleMode: () => angleMode,
-    getLastAns: () => lastAns,
     hasError: () => hasError,
 
     setAngleMode(mode) {

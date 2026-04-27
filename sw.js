@@ -2,7 +2,7 @@
 // Strategy: Cache-first for app shell, network-first for external resources.
 // On install: pre-cache all local assets so the app works fully offline.
 
-const CACHE_NAME = 'open-calc-v1';
+const CACHE_NAME = 'open-calc-v2';
 
 // All local files that make up the app shell
 const PRECACHE_ASSETS = [

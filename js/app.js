@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const historyToggle = document.getElementById("history-toggle");
   const clearHistBtn  = document.getElementById("clear-history");
   const copyBtn       = document.getElementById("copy-btn");
+  const shareBtn      = document.getElementById("share-btn");
   const themeBtn      = document.getElementById("theme-btn");
   const langBtn       = document.getElementById("lang-btn");
   const angleModeBtn  = document.getElementById("angle-mode-btn");
@@ -291,29 +292,23 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("decimal-label").textContent =
       i18n.getLang() === "es" ? "Decimales" : "Decimal Places";
     updateCopyBtn(false);
+    updateShareBtn("default");
     renderHistory();
     applyContentTranslations();
   }
 
   function applyContentTranslations() {
-    const lang = i18n.getLang();
-    const c = i18n.t.bind(i18n);
-    // Scroll hint
+    // Scroll hint text
     const scrollHintText = document.getElementById("scroll-hint-text");
     if (scrollHintText) scrollHintText.textContent = i18n.t("content.scrollHint");
+    // Drawer title
     const drawerTitleEl = document.getElementById("drawer-title");
     if (drawerTitleEl) drawerTitleEl.textContent = i18n.getLang() === "es" ? "Guía Matemática" : "Math Guide";
-    // All data-i18n elements in math content
+    // All data-i18n elements — single pass covers everything including table headers
     document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = "content." + el.dataset.i18n.replace(/^content\./, "");
-      const text = i18n.t(key);
-      if (text && text !== key) el.textContent = text;
+      const text = i18n.t("content." + el.dataset.i18n);
+      if (text && !text.startsWith("content.")) el.textContent = text;
     });
-    // Table headers (special — they use data-i18n directly)
-    const tableAngle = document.querySelector("[data-i18n='tableAngle']");
-    const tableRad   = document.querySelector("[data-i18n='tableRad']");
-    if (tableAngle) tableAngle.textContent = i18n.t("content.tableAngle");
-    if (tableRad)   tableRad.textContent   = i18n.t("content.tableRad");
   }
 
   // ── Angle mode ─────────────────────────────────────────────────────────────
@@ -331,15 +326,25 @@ document.addEventListener("DOMContentLoaded", () => {
   updateAngleModeBtn();
 
   // ── Display ────────────────────────────────────────────────────────────────
+  // Track the original expression shown above the result after compute
+  let lastComputedExpr = null;
+
   function updateDisplay() {
     const expr = Calculator.getExpression();
     const res  = Calculator.getResult();
 
-    expressionEl.textContent = expr || "";
-    // Apply decimal rounding to displayed result
+    // If we have a result, show the original expression on top (not the result)
+    if (res !== null && lastComputedExpr !== null) {
+      expressionEl.textContent = lastComputedExpr;
+    } else {
+      expressionEl.textContent = expr || "";
+      lastComputedExpr = null;
+    }
+
     resultEl.textContent = res !== null ? applyRounding(res) : "";
 
-    const len = (expr || "").length;
+    const displayExpr = expressionEl.textContent;
+    const len = displayExpr.length;
     expressionEl.style.fontSize = len > 24 ? "clamp(0.65rem, 1.2vw, 0.82rem)"
       : len > 16 ? "clamp(0.72rem, 1.4vw, 0.9rem)"
       : "";
@@ -375,6 +380,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ── Share button ───────────────────────────────────────────────────────────
+  function updateShareBtn(state) {
+    if (!shareBtn) return;
+    const lang = i18n.getLang();
+    if (state === "copied") {
+      shareBtn.textContent = lang === "es" ? "¡Copiado!" : "Copied!";
+      shareBtn.classList.add("copied");
+    } else {
+      shareBtn.textContent = lang === "es" ? "Compartir" : "Share";
+      shareBtn.classList.remove("copied");
+    }
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => {
+      // Use the original expression (e.g. cos(60)), not the result (0.5)
+      const expr = lastComputedExpr || Calculator.getExpression();
+      if (!expr) return;
+      const url = new URL(window.location.href);
+      url.searchParams.set("expr", encodeURIComponent(expr));
+      navigator.clipboard.writeText(url.toString()).then(() => {
+        updateShareBtn("copied");
+        setTimeout(() => updateShareBtn("default"), 2000);
+      });
+    });
+  }
+
   // ── History ────────────────────────────────────────────────────────────────
   function renderHistory() {
     const entries = History.getAll();
@@ -394,6 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
       li.addEventListener("click", () => {
         const res = li.dataset.result;
         Calculator.clear();
+        lastComputedExpr = null;
         res.split("").forEach(c => Calculator.append(c));
         updateDisplay();
         if (window.innerWidth < 900) {
@@ -422,13 +455,14 @@ document.addEventListener("DOMContentLoaded", () => {
       case "func":
       case "constant":
         Calculator.append(value);
+        lastComputedExpr = null;  // user started new input
         break;
-      case "paren-open":  Calculator.append("("); break;
-      case "paren-close": Calculator.append(")"); break;
-      case "dot":         Calculator.append("."); break;
-      case "backspace":   Calculator.backspace(); break;
-      case "clear":       Calculator.clear(); break;
-      case "clear-entry": Calculator.clearEntry(); break;
+      case "paren-open":  Calculator.append("("); lastComputedExpr = null; break;
+      case "paren-close": Calculator.append(")"); lastComputedExpr = null; break;
+      case "dot":         Calculator.append("."); lastComputedExpr = null; break;
+      case "backspace":   Calculator.backspace(); lastComputedExpr = null; break;
+      case "clear":       Calculator.clear(); lastComputedExpr = null; break;
+      case "clear-entry": Calculator.clearEntry(); lastComputedExpr = null; break;
       case "sign":        Calculator.toggleSign(); break;
       case "percent":     Calculator.percent(); break;
       case "ans":         Calculator.insertAns(); break;
@@ -442,6 +476,8 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       }
       case "equals": {
+        // Capture expression BEFORE compute() overwrites it with the result
+        const originalExpr = Calculator.getExpression();
         const res = Calculator.compute();
         if (res === null) return;
         if (!res.ok) {
@@ -454,9 +490,8 @@ document.addEventListener("DOMContentLoaded", () => {
           showError(errorMap[res.error] || "errorInvalid");
           return;
         }
-        if (res.fixedExpr) {
-          expressionEl.textContent = res.fixedExpr;
-        }
+        // Show the original expression (or auto-fixed version) above the result
+        lastComputedExpr = res.fixedExpr ?? originalExpr;
         History.add(res.entry.expression, res.entry.result);
         break;
       }
@@ -496,13 +531,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // Sync canonical URL to match current language
   i18n.updateCanonical(initLang);
   // If URL has ?lang= param, make sure the URL bar is clean for English
-  if (initLang === "en") {
-    const url = new URL(window.location.href);
-    if (url.searchParams.has("lang")) {
-      url.searchParams.delete("lang");
-      window.history.replaceState({}, "", url.toString());
-    }
+  // Clean up URL: remove ?lang= for English (it's the default)
+  // but always preserve ?expr= if present
+  const initUrl = new URL(window.location.href);
+  if (initLang === "en" && initUrl.searchParams.has("lang")) {
+    initUrl.searchParams.delete("lang");
+    window.history.replaceState({}, "", initUrl.toString());
   }
   applyTranslations();
+
+  // ── ?expr= URL param — pre-load a shared expression ──────────────────────
+  const exprParam = new URLSearchParams(window.location.search).get("expr");
+  if (exprParam) {
+    try {
+      const decoded = decodeURIComponent(exprParam);
+      decoded.split("").forEach(c => Calculator.append(c));
+    } catch (_) { /* malformed param — ignore silently */ }
+  }
+
   updateDisplay();
+  updateShareBtn("default"); // ensure share btn label matches current language
 });
